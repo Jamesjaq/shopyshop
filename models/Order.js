@@ -1,19 +1,12 @@
-// Order Model
-
-class Order {
-    constructor(items, user, status) {
-        this.items = items; // Array of items in the order
-        this.user = user; // User who placed the order
-        this.status = status || 'pending'; // Order status
-    }
-
-    calculateTotal() {
-        return this.items.reduce((total, item) => total + item.price * item.quantity, 0);
-    }
-
-    updateStatus(newStatus) {
-        this.status = newStatus;
-    }
-}
-
-module.exports = Order;
+// Order Schema
+const mongoose = require('mongoose');
+const OrderSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  products: [{
+    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    quantity: { type: Number, required: true }
+  }],
+  status: { type: String, default: 'pending' },
+  createdAt: { type: Date, default: Date.now }
+});
+module.exports = mongoose.model('Order', OrderSchema);
